@@ -30,6 +30,17 @@ async def get_peliculas():
     responses=NOT_FOUND,
     response_model=PeliculaSchema,
 )
+
+@peliculas_routers.get("/generos")                                  #-------------- GET GENEROS----------------
+async def get_genero():
+    return sorted(
+        {
+            pelicula["genero"]
+            for pelicula in peliculas
+            if pelicula["activo"]
+        }
+    )
+
 async def get_pelicula_by_id(id: IdCorrecto):
     for pelicula in peliculas:
         if pelicula["id"] == id:
