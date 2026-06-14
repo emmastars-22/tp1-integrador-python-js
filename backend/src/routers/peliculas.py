@@ -30,6 +30,11 @@ async def get_peliculas():
     responses=NOT_FOUND,
     response_model=PeliculaSchema,
 )
+async def get_pelicula_by_id(id: IdCorrecto):
+    for pelicula in peliculas:
+        if pelicula["id"] == id:
+            return pelicula
+    raise HTTPException(status_code=404, detail= "Película no encontrada")
 
 @peliculas_routers.get("/generos")                                  #-------------- GET GENEROS----------------
 async def get_genero():
@@ -41,18 +46,12 @@ async def get_genero():
         }
     )
 
-async def get_pelicula_by_id(id: IdCorrecto):
-    for pelicula in peliculas:
-        if pelicula["id"] == id:
-            return pelicula
-    raise HTTPException(status_code=404, detail= "Película no encontrada")
-
 @peliculas_routers.post("/", response_model=list[PeliculaSchema])         #----------------------POST-------------
 async def crear_pelicula(pelicula_nueva: PeliculaSchema):
     peliculas.append(pelicula_nueva.model_dump())
     return peliculas
 
-@peliculas_routers.delete(
+@peliculas_routers.delete(                                                #-----------------------DELETE------------
     "/{id}",
     responses=NOT_FOUND,
     response_model=PeliculaSchema,
