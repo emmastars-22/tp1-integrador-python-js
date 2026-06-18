@@ -1,41 +1,65 @@
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
 
     <title>RentAmovie</title>
-  </head>
-  <body>
-    <nav>
-      <div>Logo</div>
-      <h1>RentAmovie</h1>
-      <div>
-        <button>Inicio</button>
-        <button>Mis favs</button>
-      </div>
+</head>
+<body>
+
+    <nav class="flex justify-between p-4 bg-gray-200">
+        <div>Logo</div>
+
+        <h1 class="font-bold text-xl">
+            RentAmovie
+        </h1>
+
+        <div>
+            <button id="inicio-btn">Inicio</button>
+            <button id="favs-btn">Mis favs</button>
+        </div>
     </nav>
 
-    <section id="search-section">
-      <header>
-        <h1>Bienvenido a RentAmovie</h1>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae
-          blanditiis quos perspiciatis ducimus ipsam adipisci, architecto
-          praesentium magnam itaque nemo eligendi eum accusantium in quibusdam
-          repellendus minus enim iusto commodi!
-        </p>
-      </header>
-      <div>
-        <input type="text" id="search-input" placeholder="Buscar peli..." />
-        <button id="search-button">Buscar</button>
-      </div>
-    </section>
+    <section id="search-section" class="p-6">
+        <header>
+            <h1 class="text-2xl font-bold">
+                Bienvenido a RentAmovie
+            </h1>
 
-    <section id="mis-favs-section">
-        <div>
-            <h1>Mis Pelis Favoritas</h1>
+            <p>
+                Busca tus películas favoritas.
+            </p>
+        </header>
+
+        <div class="mt-4">
+            <input
+                type="text"
+                id="search-input"
+                placeholder="Buscar peli..."
+                class="border p-2"
+            >
+
+            <button
+                id="search-btn"
+                class="bg-blue-500 text-white px-4 py-2"
+            >
+                Buscar
+            </button>
         </div>
     </section>
-  </body>
+
+    <section id="mis-favs-section" class="hidden">
+        <h1>Mis Pelis Favoritas</h1>
+    </section>
+
+    <main
+        id="gallery"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6"
+    ></main>
+
+    <script src="main.js"></script>
+
+</body>
 </html>
