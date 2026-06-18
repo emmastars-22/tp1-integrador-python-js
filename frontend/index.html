@@ -13,15 +13,23 @@
           RentAMovie
         </div>
         <div class="flex gap-4">
-          <button id="inicio-btn"
+          <button
+            id="inicio-btn"
             class="text-sm font-medium transition-colors duration-300 text-[#A6000E] px-2 py-1 border-b-2 border-orange-500"
           >
             Inicio
           </button>
-          <button id="favs-btn"
+          <button
+            id="favs-btn"
             class="text-sm font-medium transition-colors duration-300 px-2 py-1"
           >
             Mis favs
+          </button>
+          <button
+            id="agregar-peli-btn"
+            class="text-sm font-medium transition-colors duration-300 px-2 py-1"
+          >
+            Agregar Peli
           </button>
         </div>
       </div>
@@ -62,8 +70,11 @@
 
       <section id="mis-favs-section">
         <div>
-          <h1>Mis Pelis Favoritas</h1>
         </div>
+      </section>
+
+      <section id="detalle-section">
+        <div id="detalle"></div>
       </section>
     </div>
     <main
