@@ -13,7 +13,7 @@ const GALLERY = document.getElementById("gallery");
 
 function crearCard(pelicula) {
     return `
-        <article class="border rounded-lg shadow p-4 bg-white">
+        <article class="border rounded-lg shadow p-4 bg-black">
             <h2 class="text-xl font-bold mb-2">
                 ${pelicula.nombre}
             </h2>
@@ -27,7 +27,7 @@ function crearCard(pelicula) {
             </p>
 
             <button
-                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+                class="mt-4 bg-orange-500 text-white px-4 py-2 rounded"
             >
                 Agregar a favoritos
             </button>

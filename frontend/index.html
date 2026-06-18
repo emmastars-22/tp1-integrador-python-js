@@ -1,65 +1,76 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-
     <title>RentAmovie</title>
-</head>
-<body>
-
-    <nav class="flex justify-between p-4 bg-gray-200">
-        <div>Logo</div>
-
-        <h1 class="font-bold text-xl">
-            RentAmovie
-        </h1>
-
-        <div>
-            <button id="inicio-btn">Inicio</button>
-            <button id="favs-btn">Mis favs</button>
+  </head>
+  <body class="bg-black min-h-screen text-white">
+    <nav class="border-b border-red-700 bg-slate-900/40 backdrop-blur-md py-4">
+      <div class="max-w-7xl mx-auto flex justify-between items-center px-6">
+        <div class="text-xl font-bold text-[#A6000E] font-mono tracking-wider">
+          RentAMovie
         </div>
+        <div class="flex gap-4">
+          <button id="inicio-btn"
+            class="text-sm font-medium transition-colors duration-300 text-[#A6000E] px-2 py-1 border-b-2 border-orange-500"
+          >
+            Inicio
+          </button>
+          <button id="favs-btn"
+            class="text-sm font-medium transition-colors duration-300 px-2 py-1"
+          >
+            Mis favs
+          </button>
+        </div>
+      </div>
     </nav>
-
-    <section id="search-section" class="p-6">
-        <header>
-            <h1 class="text-2xl font-bold">
-                Bienvenido a RentAmovie
-            </h1>
-
-            <p>
-                Busca tus películas favoritas.
-            </p>
+    <div class="container mx-auto px-6 py-12 max-w-7xl">
+      <section id="search-section">
+        <header class="text-center">
+          <h1 class="text-4xl text-[#B6000E] font-extrabold tracking-tight">
+            BIENVENIDO A RentAmovie
+          </h1>
+          <p class="mt-4 text-slate-400 text-lg max-w-2xl mx-auto font-light">
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae
+            blanditiis quos perspiciatis ducimus ipsam adipisci, architecto
+            praesentium magnam itaque nemo eligendi eum accusantium in quibusdam
+            repellendus minus enim iusto commodi!
+          </p>
         </header>
 
-        <div class="mt-4">
+        <div class="max-w-xl mx-auto mb-16 mt-16">
+          <div
+            class="flex items-center gap-2 bg-slate-900/40 border border-red-700 rounded-xl px-2"
+          >
             <input
-                type="text"
-                id="search-input"
-                placeholder="Buscar peli..."
-                class="border p-2"
-            >
-
+              type="text"
+              id="search-input"
+              placeholder="Buscar peli..."
+              class="w-full bg-transparent px-4 py-3 text-white placeholder-slate-500 focus:outline-none"
+            />
             <button
-                id="search-btn"
-                class="bg-blue-500 text-white px-4 py-2"
+              id="search-button"
+              class="bg-gradient-to-r from-red-700 to-orange-700 px-6 py-3 rounded-xl hover:from-orange-400 hover:to-orange-500 transition-all duration-300 active:scale-95"
             >
-                Buscar
+              Buscar
             </button>
+          </div>
         </div>
-    </section>
+      </section>
 
-    <section id="mis-favs-section" class="hidden">
-        <h1>Mis Pelis Favoritas</h1>
-    </section>
-
+      <section id="mis-favs-section">
+        <div>
+          <h1>Mis Pelis Favoritas</h1>
+        </div>
+      </section>
+    </div>
     <main
-        id="gallery"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6"
+      id="gallery"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6"
     ></main>
 
     <script src="main.js"></script>
-
-</body>
+  </body>
 </html>
