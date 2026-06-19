@@ -94,6 +94,22 @@ async function verDetallePeli(id) {
         >
           Volver
         </button>
+
+        <button
+          onclick="modificarPeli()"
+          class="mt-6 bg-red-600 px-4 py-2 rounded"
+        >
+          Modificar Peli
+        </button>
+
+        <button
+          onclick="borrarPeli()"
+          class="mt-6 bg-red-600 px-4 py-2 rounded"
+        >
+          Borrar Peli
+        </button>
+
+
       </article>
     `;
   } catch (error) {
@@ -111,7 +127,16 @@ function mostrarInicio() {
   obtenerPelis();
 }
 
-INICIO_BTN.addEventListener("click", mostrarInicio);
+function mostrarFavs() {
+  DETALLE_SECTION.classList.add("hidden");
+  GALLERY.classList.add("hidden");
+
+  MY_FAVS_SECTION.classList.remove("hidden");
+
+  obtenerFavs();
+}
+
+FAVS_BTN.addEventListener("click", mostrarFavs);
 
 async function crearPeli(nuevaPeli) {
   try {
