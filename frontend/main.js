@@ -2,10 +2,12 @@ const API_URL = "http://127.0.0.1:8000/peliculas/";
 
 const INICIO_BTN = document.getElementById("inicio-btn");
 const FAVS_BTN = document.getElementById("favs-btn");
+const AGREGAR_PELI_BTN = document.getElementById("agregar-peli-btn");
 
 const SEARCH_SECTION = document.getElementById("search-section");
 const SEARCH_INPUT = document.getElementById("search-input");
 const SEARCH_BTN = document.getElementById("search-btn");
+const FORM_SECTION = document.getElementById("form-section");
 
 const DETALLE_SECTION = document.getElementById("detalle-section");
 const DETALLE = document.getElementById("detalle");
@@ -13,6 +15,50 @@ const DETALLE = document.getElementById("detalle");
 const MY_FAVS_SECTION = document.getElementById("mis-favs-section");
 
 const GALLERY = document.getElementById("gallery");
+
+// ====================
+// FUNCIONES AUXILIARES
+// ====================
+
+function ocultarTodo() {
+  GALLERY.classList.add("hidden");
+  DETALLE_SECTION.classList.add("hidden");
+  FORM_SECTION.classList.add("hidden");
+  MY_FAVS_SECTION.classList.add("hidden");
+}
+
+function mostrarFavs() {
+  DETALLE_SECTION.classList.add("hidden");
+  GALLERY.classList.add("hidden");
+
+  MY_FAVS_SECTION.classList.remove("hidden");
+
+  obtenerFavs();
+}
+
+function mostrarAgregarPeli() {
+  DETALLE_SECTION.classList.add("hidden");
+  GALLERY.classList.add("hidden");
+
+  MY_FAVS_SECTION.classList.remove("hidden");
+
+  crearPeli();
+}
+
+function mostrarInicio() {
+  DETALLE_SECTION.classList.add("hidden");
+  MY_FAVS_SECTION.classList.add("hidden");
+
+  GALLERY.classList.remove("hidden");
+  SEARCH_SECTION.classList.remove("hidden");
+  FORM_SECTION.classList.add("hidden");
+
+  obtenerPelis();
+}
+
+// ====================
+// RENDER
+// ====================
 
 function crearCard(pelicula) {
   return `
@@ -44,6 +90,53 @@ function crearCard(pelicula) {
         </article>
     `;
 }
+
+function mostrarFormularioCrear() {
+  ocultarTodo();
+
+  FORM_SECTION.classList.remove("hidden");
+
+  FORM_SECTION.innerHTML = `
+
+        <form id="form-crear" class="flex flex-col gap-4">
+
+            <input
+                id="nombre"
+                type="text"
+                placeholder="Nombre"
+                class="border p-2"
+            >
+
+            <input
+                id="precio"
+                type="number"
+                placeholder="Precio"
+                class="border p-2"
+            >
+
+            <textarea
+                id="descripcion"
+                placeholder="Descripción"
+                class="border p-2"
+            ></textarea>
+
+            <button
+                class="bg-green-600 p-2 rounded"
+            >
+                Guardar película
+            </button>
+
+        </form>
+    `;
+
+  document
+    .getElementById("form-crear")
+    .addEventListener("submit", manejarCrearPeli);
+}
+
+// ====================
+// API
+// ====================
 
 async function obtenerPelis() {
   try {
@@ -117,27 +210,6 @@ async function verDetallePeli(id) {
   }
 }
 
-function mostrarInicio() {
-  DETALLE_SECTION.classList.add("hidden");
-  MY_FAVS_SECTION.classList.add("hidden");
-
-  GALLERY.classList.remove("hidden");
-  SEARCH_SECTION.classList.remove("hidden");
-
-  obtenerPelis();
-}
-
-function mostrarFavs() {
-  DETALLE_SECTION.classList.add("hidden");
-  GALLERY.classList.add("hidden");
-
-  MY_FAVS_SECTION.classList.remove("hidden");
-
-  obtenerFavs();
-}
-
-FAVS_BTN.addEventListener("click", mostrarFavs);
-
 async function crearPeli(nuevaPeli) {
   try {
     const respuesta = await fetch(API_URL, {
@@ -154,3 +226,31 @@ async function crearPeli(nuevaPeli) {
     console.error("Error al obtener películas:", error);
   }
 }
+
+// ====================
+// FORMULARIOS
+// ====================
+
+async function manejarCrearPeli(e) {
+  e.preventDefault();
+
+  const nuevaPeli = {
+    nombre: document.getElementById("nombre").value,
+
+    precio: document.getElementById("precio").value,
+
+    descripcion: document.getElementById("descripcion").value,
+  };
+
+  await crearPeli(nuevaPeli);
+
+  mostrarInicio();
+}
+
+// ====================
+// EVENTOS
+// ====================
+
+FAVS_BTN.addEventListener("click", mostrarFavs);
+AGREGAR_PELI_BTN.addEventListener("click", mostrarFormularioCrear);
+INICIO_BTN.addEventListener("click", mostrarInicio);
