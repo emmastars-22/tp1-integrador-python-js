@@ -25,6 +25,7 @@ function ocultarTodo() {
   DETALLE_SECTION.classList.add("hidden");
   FORM_SECTION.classList.add("hidden");
   MY_FAVS_SECTION.classList.add("hidden");
+  SEARCH_SECTION.classList.add("hidden")
 }
 
 function mostrarFavs() {
@@ -62,31 +63,38 @@ function mostrarInicio() {
 
 function crearCard(pelicula) {
   return `
-        <article class="border rounded-lg shadow p-4 bg-black">
-            <h2 class="text-xl font-bold mb-2">
-                ${pelicula.nombre}
-            </h2>
+  <article 
+          class="relative border border-red-900 rounded-lg shadow p-4 bg-black overflow-hidden bg-cover bg-center"
+          style="background-image:url('${pelicula.imagen}')"
+        >
+            <div class="absolute inset-0 bg-black/70"></div>
 
-            <p>
-                <strong>ID:</strong> ${pelicula.id}
-            </p>
+            <div class="relative z-10">
+                <h2 class="text-xl font-bold mb-2">
+                    ${pelicula.nombre}
+                </h2>
 
-            <p class="mt-2">
-                <strong>Precio:</strong> $${pelicula.precio}
-            </p>
+                <p>
+                    <strong>ID:</strong> ${pelicula.id}
+                </p>
 
-            <button
-            onclick="verDetallePeli(${pelicula.id})"
-            class="bg-blue-600 text-white px-4 py-2 rounded"
-            >
-            Ver detalle
-            </button>
+                <p class="mt-2">
+                    <strong>Precio:</strong> $${pelicula.precio}
+                </p>
 
-            <button
-                class="mt-4 bg-red-500 text-white px-4 py-2 rounded"
-            >
-                Agregar a favoritos
-            </button>
+                <button
+                onclick="verDetallePeli(${pelicula.id})"
+                class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-500 transition-colors duration-300"
+                >
+                Ver detalle
+                </button>
+
+                <button
+                    class="mt-4 bg-[#A6000E] text-white px-4 py-2 rounded hover:bg-red-700 transition-colors duration-300"
+                >
+                    Agregar a favoritos
+                </button>
+            </div>
         </article>
     `;
 }
@@ -98,36 +106,49 @@ function mostrarFormularioCrear() {
 
   FORM_SECTION.innerHTML = `
 
-        <form id="form-crear" class="flex flex-col gap-4">
+<form
+    id="form-crear"
+    class="max-w-md mx-auto bg-black border border-red-900 rounded-lg shadow-lg p-6 flex flex-col gap-4"
+>
+    <h2 class="text-2xl font-bold text-white text-center mb-2">
+        Nueva película
+    </h2>
 
-            <input
-                id="nombre"
-                type="text"
-                placeholder="Nombre"
-                class="border p-2"
-            >
+    <input
+        id="id"
+        type="text"
+        placeholder="ID"
+        class="bg-zinc-900 border border-red-900 text-white p-3 rounded focus:outline-none focus:border-orange-500 transition-colors"
+    >
 
-            <input
-                id="precio"
-                type="number"
-                placeholder="Precio"
-                class="border p-2"
-            >
+    <input
+        id="nombre"
+        type="text"
+        placeholder="Nombre"
+        class="bg-zinc-900 border border-red-900 text-white p-3 rounded focus:outline-none focus:border-orange-500 transition-colors"
+    >
 
-            <textarea
-                id="descripcion"
-                placeholder="Descripción"
-                class="border p-2"
-            ></textarea>
+    <input
+        id="precio"
+        type="number"
+        placeholder="Precio"
+        class="bg-zinc-900 border border-red-900 text-white p-3 rounded focus:outline-none focus:border-orange-500 transition-colors"
+    >
 
-            <button
-                class="bg-green-600 p-2 rounded"
-            >
-                Guardar película
-            </button>
+    <textarea
+        id="descripcion"
+        placeholder="Descripción"
+        rows="5"
+        class="bg-zinc-900 border border-red-900 text-white p-3 rounded resize-none focus:outline-none focus:border-orange-500 transition-colors"
+    ></textarea>
 
-        </form>
-    `;
+    <button
+        type="submit"
+        class="bg-orange-600 text-white font-semibold py-3 rounded hover:bg-orange-500 transition-colors duration-300"
+    >
+        Guardar película
+    </button>
+</form>    `;
 
   document
     .getElementById("form-crear")
@@ -235,6 +256,8 @@ async function manejarCrearPeli(e) {
   e.preventDefault();
 
   const nuevaPeli = {
+    id: document.getElementById("id").value,
+
     nombre: document.getElementById("nombre").value,
 
     precio: document.getElementById("precio").value,
