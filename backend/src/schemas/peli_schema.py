@@ -12,6 +12,7 @@ class PeliculaSchema(BaseModel):
     nombre: StrCorto
     precio: Precio
     activo: BoolActivo = True
+    imagen: str = "https://placehold.co/400x600/1a1a1a/0a0a0a"
 
 class PeliculaUpdateSchema(BaseModel):
     nombre: StrCorto
