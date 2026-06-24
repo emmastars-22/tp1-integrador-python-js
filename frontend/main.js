@@ -154,6 +154,62 @@ function mostrarFormularioCrear() {
     .addEventListener("submit", manejarCrearPeli);
 }
 
+function mostrarFormularioEditar() {        //EDITAR!----- NO TESTED
+  ocultarTodo();
+
+  FORM_SECTION.classList.remove("hidden");
+
+  FORM_SECTION.innerHTML = `
+
+        <form id="form-editar" class="flex flex-col gap-4 mx-10 text-black">
+
+            <input
+                id="edit-id"
+                type="number"
+                class="border p-2"
+                readonly
+            >
+
+            <input
+                id="edit-nombre"
+                type="text"
+                placeholder="Nombre"
+                class="border p-2"
+            >
+
+            <input
+                id="edit-precio"
+                type="number"
+                placeholder="Precio"
+                class="border p-2"
+            >
+            
+              <label
+                for="activo"
+                class="text-white">
+                Activo
+              </label>
+              <input
+                type="checkbox"
+                id="activo"
+                checked
+                class="w-5 h-5"
+              >
+
+            <button
+                class="bg-green-600 p-2 rounded"
+            >
+                Guardar cambios
+            </button>
+
+        </form>
+    `;
+
+  document
+    .getElementById("form-editar")
+    .addEventListener("submit", manejarEditarPeli);
+}
+
 // ====================
 // API
 // ====================
@@ -277,6 +333,9 @@ async function borrarPeli(id) {
   } catch (error) {
     console.error("Error al borrar película: ", error);
   }
+  
+  alert(`Película ${id} borrada con éxito`)
+  mostrarInicio()
 }
 
 // ====================
@@ -301,7 +360,8 @@ async function manejarCrearPeli(e) {
   mostrarInicio();
 }
 
-async function formEditarPeli(e) {
+
+async function manejarEditarPeli(e) {     //NO COMPLETO!-----------
   e.preventDefault();
 
   const editarPeli = {
@@ -312,7 +372,7 @@ async function formEditarPeli(e) {
     descripcion: document.getElementById("descripcion").value,
   };
 
-  await modificarPeli(editarPeli, )
+  await modificarPeli(editarPeli);
 }
 // ====================
 // EVENTOS
