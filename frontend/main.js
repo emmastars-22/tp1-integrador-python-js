@@ -265,9 +265,13 @@ async function verDetallePeli(id) {
     DETALLE_SECTION.classList.remove("hidden");
 
     DETALLE.innerHTML = `
-      <article class="max-w-3xl mx-auto border rounded-lg shadow p-6 bg-black">
-        <h1 class="text-4xl font-bold mb-4">${pelicula.nombre}</h1>
+        <article class="relative max-w-3xl mx-auto border border-red-900 rounded-lg shadow p-6 bg-black overflow-hidden bg-cover bg-center"
+        style="background-image:url('${pelicula.imagen}')">
 
+        <div class="absolute inset-0 bg-black/80"></div>
+
+        <div class="relative z-10">
+        <h1 class="text-4xl font-bold mb-4">${pelicula.nombre}</h1>
         <p><strong>ID:</strong> ${pelicula.id}</p>
         <p><strong>Precio:</strong> $${pelicula.precio}</p>
         <p><strong>Activo:</strong> ${pelicula.activo}</p>
