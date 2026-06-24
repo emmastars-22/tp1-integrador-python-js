@@ -214,47 +214,6 @@ async function mostrarFormularioModificar(id) {
     .getElementById("form-modificar")
     .addEventListener("submit", (e) => manejarEditarPeli(e, id));
 }
-// ====================
-// API
-// ====================
-
-async function obtenerPelis() {
-  try {
-    const respuesta = await fetch(API_URL);
-
-    if (!respuesta.ok) {
-      throw new Error("No se pudieron obtener las películas");
-    }
-
-    const peliculas = await respuesta.json();
-
-    GALLERY.innerHTML = "";
-
-    peliculas.forEach((pelicula) => {
-      GALLERY.innerHTML += crearCard(pelicula);
-    });
-  } catch (error) {
-    console.error("Error al obtener películas:", error);
-  }
-}
-obtenerPelis();
-
-async function obtenerPeliPorId(id) {
-  try {
-    const respuesta = await fetch(`${API_URL}${id}`);
-
-    if (!respuesta.ok) {
-      throw new Error("No se pudo obtener la película");
-    }
-
-    const pelicula = await respuesta.json();
-
-    return pelicula;
-  } catch (error) {
-    console.error("Error al obtener película:", error);
-    return null;
-  }
-}
 
 async function verDetallePeli(id) {
   try {
@@ -298,6 +257,72 @@ async function verDetallePeli(id) {
     `;
   } catch (error) {
     console.error(error);
+  }
+}
+
+async function buscarPeli(id) {
+  try {
+    const id = SEARCH_INPUT.value.trim();
+
+    if (!id) {
+      alert("Ingrese un ID");
+      return;
+    }
+
+    const pelicula = await obtenerPeliPorId(id);
+
+    if (!pelicula) {
+      alert("Película no encontrada");
+      return;
+    }
+
+    verDetallePeli(id);
+
+    SEARCH_INPUT.value = "";
+  } catch (error) {
+    console.error("Error al editar película: ", error);
+  }
+}
+
+// ====================
+// API
+// ====================
+
+async function obtenerPelis() {
+  try {
+    const respuesta = await fetch(API_URL);
+
+    if (!respuesta.ok) {
+      throw new Error("No se pudieron obtener las películas");
+    }
+
+    const peliculas = await respuesta.json();
+
+    GALLERY.innerHTML = "";
+
+    peliculas.forEach((pelicula) => {
+      GALLERY.innerHTML += crearCard(pelicula);
+    });
+  } catch (error) {
+    console.error("Error al obtener películas:", error);
+  }
+}
+obtenerPelis();
+
+async function obtenerPeliPorId(id) {
+  try {
+    const respuesta = await fetch(`${API_URL}${id}`);
+
+    if (!respuesta.ok) {
+      throw new Error("No se pudo obtener la película");
+    }
+
+    const pelicula = await respuesta.json();
+
+    return pelicula;
+  } catch (error) {
+    console.error("Error al obtener película:", error);
+    return null;
   }
 }
 
@@ -396,3 +421,4 @@ async function manejarEditarPeli(e, id) {
 FAVS_BTN.addEventListener("click", mostrarFavs);
 AGREGAR_PELI_BTN.addEventListener("click", mostrarFormularioCrear);
 INICIO_BTN.addEventListener("click", mostrarInicio);
+SEARCH_BTN.addEventListener("click", buscarPeli)
