@@ -57,6 +57,24 @@ function mostrarInicio() {
   obtenerPelis();
 }
 
+function getFavoritos() {
+  const favs = localStorage.getItem("favoritos")
+  return favs ? JSON.parse(favs) : [];
+}
+
+function activarFavoritos(peliId) {
+  let favs = getFavoritos()
+  const idStr = String(peliId)
+
+  if (favs.includes(idStr)) {
+    favs = favs.filter(id => id !== idStr)
+  } else {
+    favs.push(idStr)
+  }
+  localStorage.setItem("favoritos", JSON.stringify(favs))
+  alert("Favoritos actualizados!")
+}
+
 // ====================
 // RENDER
 // ====================
@@ -90,7 +108,8 @@ function crearCard(pelicula) {
                 </button>
 
                 <button
-                    class="mt-4 bg-[#A6000E] text-white px-4 py-2 rounded hover:bg-red-700 transition-colors duration-300"
+                    class="mt-4 bg-[#A6000E] text-white px-4 py-2 rounded hover:bg-red-700"
+                    onclick="activarFavoritos(${pelicula.id})"
                 >
                     Agregar a favoritos
                 </button>
@@ -282,6 +301,22 @@ async function buscarPeli(id) {
   } catch (error) {
     console.error("Error al editar película: ", error);
   }
+}
+
+async function obtenerFavs() {
+  const favs = getFavoritos()
+  const respuesta = await fetch(API_URL)
+  const peliculas = await respuesta.json()
+  
+  const favoritas = peliculas.filter(
+    peli => favs.includes(String(peli.id))
+  )
+
+  MY_FAVS_SECTION.innerHTML = ""
+
+  favoritas.forEach(peli => {
+    MY_FAVS_SECTION.innerHTML += crearCard(peli)
+  })
 }
 
 // ====================
