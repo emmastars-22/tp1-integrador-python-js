@@ -25,7 +25,7 @@ function ocultarTodo() {
   DETALLE_SECTION.classList.add("hidden");
   FORM_SECTION.classList.add("hidden");
   MY_FAVS_SECTION.classList.add("hidden");
-  SEARCH_SECTION.classList.add("hidden")
+  SEARCH_SECTION.classList.add("hidden");
 }
 
 function mostrarFavs() {
@@ -210,14 +210,14 @@ async function verDetallePeli(id) {
         </button>
 
         <button
-          onclick="modificarPeli()"
+          onclick="modificarPeli(${pelicula.id})"
           class="mt-6 bg-red-600 px-4 py-2 rounded"
         >
           Modificar Peli
         </button>
 
         <button
-          onclick="borrarPeli()"
+          onclick="borrarPeli(${pelicula.id})"
           class="mt-6 bg-red-600 px-4 py-2 rounded"
         >
           Borrar Peli
@@ -243,6 +243,37 @@ async function crearPeli(nuevaPeli) {
     console.log("respuesta POST: ", datos);
 
     obtenerPelis();
+  } catch (error) {
+    console.error("Error al obtener películas:", error);
+  }
+}
+
+async function borrarPeli(id) {
+  try {
+    const respuesta = await fetch(`${API_URL}${id}`, {
+      method: "DELETE",
+    });
+
+    const pelicula = await respuesta.json();
+    console.log("respuesta DELETE: ", pelicula);
+
+    mostrarInicio();
+  } catch (error) {
+    console.error("Error al obtener películas:", error);
+  }
+}
+
+async function modificarPeli(nuevaPeli, id) {
+  try {
+    const respuesta = await fetch(`${API_URL}${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(nuevaPeli),
+    });
+
+    const pelicula = await respuesta.json();
+    console.log("respuesta PUT: ", pelicula)
+
   } catch (error) {
     console.error("Error al obtener películas:", error);
   }
