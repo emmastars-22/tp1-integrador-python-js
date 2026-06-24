@@ -56,6 +56,24 @@ function mostrarInicio() {
   obtenerPelis();
 }
 
+function getFavoritos() {
+  const favs = localStorage.getItem("favoritos")
+  return favs ? JSON.parse(favs) : [];
+}
+
+function activarFavoritos(peliId) {
+  let favs = getFavoritos()
+  const idStr = String(peliId)
+
+  if (favs.includes(idStr)) {
+    favs = favs.filter(id => id !== idStr)
+  } else {
+    favs.push(idStr)
+  }
+  localStorage.setItem("favoritos", JSON.stringify(favs))
+}
+
+
 // ====================
 // RENDER
 // ====================
@@ -89,7 +107,8 @@ function crearCard(pelicula) {
                 </button>
 
                 <button
-                    class="mt-4 bg-[#A6000E] text-white px-4 py-2 rounded hover:bg-red-700 transition-colors duration-300"
+                  onclick="activarFavoritos(${pelicula.id})"
+                  class="mt-4 bg-[#A6000E] text-white px-4 py-2 rounded hover:bg-red-700 transition-colors duration-300"
                 >
                     Agregar a favoritos
                 </button>
@@ -154,7 +173,7 @@ function mostrarFormularioCrear() {
     .addEventListener("submit", manejarCrearPeli);
 }
 
-function mostrarFormularioEditar() {        //EDITAR!----- NO TESTED
+function mostrarFormularioEditar() {        //EDITAR!----- NO TESTED-------------------------
   ocultarTodo();
 
   FORM_SECTION.classList.remove("hidden");
@@ -265,7 +284,7 @@ async function verDetallePeli(id) {
         </button>
 
         <button
-          onclick="modificarPeli(${pelicula.id})"
+          onclick="mostrarFormularioEditar()"
           class="mt-6 bg-red-600 px-4 py-2 rounded"
         >
           Modificar Peli
@@ -338,6 +357,22 @@ async function borrarPeli(id) {
   mostrarInicio()
 }
 
+async function obtenerFavs() {
+  const favs = getFavoritos()
+  const respuesta = await fetch(API_URL)
+  const peliculas = await respuesta.json()
+  
+  const favoritas = peliculas.filter(
+    peli => favs.includes(String(peli.id))
+  )
+
+  MY_FAVS_SECTION.innerHTML = ""
+
+  favoritas.forEach(peli => {
+    MY_FAVS_SECTION.innerHTML += crearCard(peli)
+  })
+}
+
 // ====================
 // FORMULARIOS
 // ====================
@@ -361,7 +396,7 @@ async function manejarCrearPeli(e) {
 }
 
 
-async function manejarEditarPeli(e) {     //NO COMPLETO!-----------
+async function manejarEditarPeli(e) {     //NO COMPLETO!-------------------------------------
   e.preventDefault();
 
   const editarPeli = {
