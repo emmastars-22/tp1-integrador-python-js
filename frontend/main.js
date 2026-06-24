@@ -135,13 +135,17 @@ function mostrarFormularioCrear() {
         class="bg-zinc-900 border border-red-900 text-white p-3 rounded focus:outline-none focus:border-orange-500 transition-colors"
     >
 
-    <textarea
-        id="descripcion"
-        placeholder="Descripción"
-        rows="5"
-        class="bg-zinc-900 border border-red-900 text-white p-3 rounded resize-none focus:outline-none focus:border-orange-500 transition-colors"
-    ></textarea>
-
+    <label
+        for="activo"
+        class="text-white">
+        Activo
+    </label>
+      <input
+          type="checkbox"
+          id="activo"
+          checked
+          class="w-5 h-5"
+      >
     <button
         type="submit"
         class="bg-orange-600 text-white font-semibold py-3 rounded hover:bg-orange-500 transition-colors duration-300"
@@ -155,6 +159,61 @@ function mostrarFormularioCrear() {
     .addEventListener("submit", manejarCrearPeli);
 }
 
+async function mostrarFormularioModificar(id) {
+  ocultarTodo();
+  const pelicula = await obtenerPeliPorId(id);
+
+  FORM_SECTION.classList.remove("hidden");
+
+  FORM_SECTION.innerHTML = `
+
+<form
+    id="form-modificar"
+    class="max-w-md mx-auto bg-black border border-red-900 rounded-lg shadow-lg p-6 flex flex-col gap-4 "
+>
+    <h2 class="text-2xl font-bold text-white text-center mb-2">
+        Modificar película
+    </h2>
+
+    <input
+        id="nombre"
+        type="text"
+        placeholder="Nombre"
+        class="bg-zinc-900 border border-red-900 text-white p-3 rounded focus:outline-none focus:border-orange-500 transition-colors"
+        value="${pelicula.nombre}"
+    >
+
+    <input
+        id="precio"
+        type="number"
+        placeholder="Precio"
+        class="bg-zinc-900 border border-red-900 text-white p-3 rounded focus:outline-none focus:border-orange-500 transition-colors"
+        value="${pelicula.precio}"
+    >
+
+    <label
+        for="activo"
+        class="text-white">
+        Activo
+    </label>
+      <input
+          type="checkbox"
+          id="activo"
+          class="w-5 h-5"
+          ${pelicula.activo ? "checked" : ""}
+      >
+    <button
+        type="submit"
+        class="bg-orange-600 text-white font-semibold py-3 rounded hover:bg-orange-500 transition-colors duration-300"
+    >
+        Modificar película
+    </button>
+</form>    `;
+
+  document
+    .getElementById("form-modificar")
+    .addEventListener("submit", (e) => manejarEditarPeli(e, id));
+}
 // ====================
 // API
 // ====================
@@ -180,7 +239,7 @@ async function obtenerPelis() {
 }
 obtenerPelis();
 
-async function verDetallePeli(id) {
+async function obtenerPeliPorId(id) {
   try {
     const respuesta = await fetch(`${API_URL}${id}`);
 
@@ -189,6 +248,17 @@ async function verDetallePeli(id) {
     }
 
     const pelicula = await respuesta.json();
+
+    return pelicula;
+  } catch (error) {
+    console.error("Error al obtener película:", error);
+    return null;
+  }
+}
+
+async function verDetallePeli(id) {
+  try {
+    const pelicula = await obtenerPeliPorId(id);
 
     // Ocultar la galería y mostrar el detalle
     GALLERY.classList.add("hidden");
@@ -200,7 +270,7 @@ async function verDetallePeli(id) {
 
         <p><strong>ID:</strong> ${pelicula.id}</p>
         <p><strong>Precio:</strong> $${pelicula.precio}</p>
-        <p><strong>Descripción:</strong> ${pelicula.descripcion}</p>
+        <p><strong>Activo:</strong> ${pelicula.activo}</p>
 
         <button
           onclick="mostrarInicio()"
@@ -210,7 +280,7 @@ async function verDetallePeli(id) {
         </button>
 
         <button
-          onclick="modificarPeli(${pelicula.id})"
+          onclick="mostrarFormularioModificar(${pelicula.id})"
           class="mt-6 bg-red-600 px-4 py-2 rounded"
         >
           Modificar Peli
@@ -257,25 +327,27 @@ async function borrarPeli(id) {
     const pelicula = await respuesta.json();
     console.log("respuesta DELETE: ", pelicula);
 
+    alert(`Película ${id} borrada con éxito`);
     mostrarInicio();
   } catch (error) {
     console.error("Error al obtener películas:", error);
   }
 }
 
-async function modificarPeli(nuevaPeli, id) {
+async function modificarPeli(peliModificada, id) {
   try {
     const respuesta = await fetch(`${API_URL}${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(nuevaPeli),
+      body: JSON.stringify(peliModificada),
     });
 
-    const pelicula = await respuesta.json();
-    console.log("respuesta PUT: ", pelicula)
+    const datos = await respuesta.json();
+    console.log("respuesta PUT: ", datos);
 
+    mostrarInicio();
   } catch (error) {
-    console.error("Error al obtener películas:", error);
+    console.error("Error al editar película: ", error);
   }
 }
 
@@ -293,10 +365,26 @@ async function manejarCrearPeli(e) {
 
     precio: document.getElementById("precio").value,
 
-    descripcion: document.getElementById("descripcion").value,
+    activo: document.getElementById("activo").checked,
   };
 
   await crearPeli(nuevaPeli);
+
+  mostrarInicio();
+}
+
+async function manejarEditarPeli(e, id) {
+  e.preventDefault();
+
+  const peliModificada = {
+    nombre: document.getElementById("nombre").value,
+
+    precio: document.getElementById("precio").value,
+
+    activo: document.getElementById("activo").checked,
+  };
+
+  await modificarPeli(peliModificada, id);
 
   mostrarInicio();
 }
