@@ -1,7 +1,7 @@
 const API_URL = "http://127.0.0.1:8000/peliculas/";
 
 const INICIO_BTN = document.getElementById("inicio-btn");
-const FAVS_BTN = document.getElementById("favs-btn");
+const FAVS_SECTION_BTN = document.getElementById("favs-section-btn");
 const AGREGAR_PELI_BTN = document.getElementById("agregar-peli-btn");
 
 const SEARCH_SECTION = document.getElementById("search-section");
@@ -29,8 +29,7 @@ function ocultarTodo() {
 }
 
 function mostrarFavs() {
-  DETALLE_SECTION.classList.add("hidden");
-  GALLERY.classList.add("hidden");
+  ocultarTodo();
 
   MY_FAVS_SECTION.classList.remove("hidden");
 
@@ -47,32 +46,38 @@ function mostrarAgregarPeli() {
 }
 
 function mostrarInicio() {
-  DETALLE_SECTION.classList.add("hidden");
-  MY_FAVS_SECTION.classList.add("hidden");
+  ocultarTodo();
 
   GALLERY.classList.remove("hidden");
   SEARCH_SECTION.classList.remove("hidden");
-  FORM_SECTION.classList.add("hidden");
 
   obtenerPelis();
 }
 
 function getFavoritos() {
-  const favs = localStorage.getItem("favoritos")
+  const favs = localStorage.getItem("favoritos");
   return favs ? JSON.parse(favs) : [];
 }
 
 function activarFavoritos(peliId) {
-  let favs = getFavoritos()
-  const idStr = String(peliId)
+  let favs = getFavoritos();
+  const idStr = String(peliId);
 
   if (favs.includes(idStr)) {
-    favs = favs.filter(id => id !== idStr)
+    favs = favs.filter(id => id !== idStr);
   } else {
-    favs.push(idStr)
+    favs.push(idStr);
   }
-  localStorage.setItem("favoritos", JSON.stringify(favs))
-  alert("Favoritos actualizados!")
+
+  localStorage.setItem("favoritos", JSON.stringify(favs));
+
+  if (!GALLERY.classList.contains("hidden")) {
+    obtenerPelis();
+  }
+
+}
+function esFavorito(id) {
+  return getFavoritos().includes(String(id));
 }
 
 // ====================
@@ -80,6 +85,7 @@ function activarFavoritos(peliId) {
 // ====================
 
 function crearCard(pelicula) {
+  const esFav = esFavorito(pelicula.id);
   return `
   <article 
           class="relative border border-red-900 rounded-lg shadow p-4 bg-black overflow-hidden bg-cover bg-center"
@@ -108,10 +114,26 @@ function crearCard(pelicula) {
                 </button>
 
                 <button
-                    class="mt-4 bg-[#A6000E] text-white px-4 py-2 rounded hover:bg-red-700"
+                    class="absolute top-3 right-3 z-20 hover:scale-125 transition-all duration-300"
                     onclick="activarFavoritos(${pelicula.id})"
                 >
-                    Agregar a favoritos
+                    <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    class="w-8 h-8"
+                    fill="${esFav ? "#dc2626" : "none"}"
+                    stroke="${esFav ? "#dc2626" : "white"}"
+                    stroke-width="2"
+                >
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                2 5.42 4.42 3 7.5 3
+                  c1.74 0 3.41.81 4.5 2.09
+                  C13.09 3.81 14.76 3 16.5 3
+                  19.58 3 22 5.42 22 8.5
+                  c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+    />
+  </svg>
                 </button>
             </div>
         </article>
@@ -304,19 +326,17 @@ async function buscarPeli(id) {
 }
 
 async function obtenerFavs() {
-  const favs = getFavoritos()
-  const respuesta = await fetch(API_URL)
-  const peliculas = await respuesta.json()
-  
-  const favoritas = peliculas.filter(
-    peli => favs.includes(String(peli.id))
-  )
+  const favs = getFavoritos();
+  const respuesta = await fetch(API_URL);
+  const peliculas = await respuesta.json();
 
-  MY_FAVS_SECTION.innerHTML = ""
+  const favoritas = peliculas.filter((peli) => favs.includes(String(peli.id)));
 
-  favoritas.forEach(peli => {
-    MY_FAVS_SECTION.innerHTML += crearCard(peli)
-  })
+  MY_FAVS_SECTION.innerHTML = "";
+
+  favoritas.forEach((peli) => {
+    MY_FAVS_SECTION.innerHTML += crearCard(peli);
+  });
 }
 
 // ====================
@@ -453,7 +473,7 @@ async function manejarEditarPeli(e, id) {
 // EVENTOS
 // ====================
 
-FAVS_BTN.addEventListener("click", mostrarFavs);
+FAVS_SECTION_BTN.addEventListener("click", mostrarFavs);
 AGREGAR_PELI_BTN.addEventListener("click", mostrarFormularioCrear);
 INICIO_BTN.addEventListener("click", mostrarInicio);
-SEARCH_BTN.addEventListener("click", buscarPeli)
+SEARCH_BTN.addEventListener("click", buscarPeli);
